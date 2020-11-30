@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wisea.mapper.ItemMapper" >
+   <insert id="batchInsertItemIndex" parameterType="java.util.List">
+        insert into item_index (id, item_id, item_country) values
+        <foreach collection="list" item="itemIndex" separator="," close=";">
+            (#{itemIndex.id},#{itemIndex.itemId},#{itemIndex.itemCountry})
+        </foreach>
+   </insert>
+
+    <update id="batchUpdateItemIndex" parameterType="java.util.List">
+        update item_index
+        set status =
+        <foreach collection="list" item="itemIndex" separator=" " open="case id" close="end">
+            when #{itemIndex.id} then '1'
+        </foreach>
+        where id in
+        <foreach collection="list" item="itemIndex" separator="," open="(" close=")">
+            #{itemIndex.id}
+        </foreach>
+        and status = '0'
+
+    </update>
+
+
+    <insert id="batchInsertItemDetail" parameterType="java.util.List">
+        insert into item_detail (id, item_id, item_country,item_name,item_ens_name,
+        item_class,pub_date,impl_date,indicators,comments,prod_name,prod_ens_name,
+        prod_class,ts_no,ts_name,ts_ens_name,cas_no,detec_method_no) values
+        <foreach collection="list" item="itemDetail" separator="," close=";">
+            (#{itemDetail.id},#{itemDetail.itemId},#{itemDetail.itemCountry},#{itemDetail.itemName},
+            #{itemDetail.itemEnsName},#{itemDetail.itemClass},#{itemDetail.pubDate},#{itemDetail.implDate},
+            #{itemDetail.indicators},#{itemDetail.comments},#{itemDetail.prodName},#{itemDetail.prodEnsName},
+            #{itemDetail.prodClass},#{itemDetail.tsNo},#{itemDetail.tsName},#{itemDetail.tsEnsName},
+            #{itemDetail.casNo},#{itemDetail.detecMethodNo})
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,36 @@
+mybatis:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+spring:
+  datasource:
+#    url: jdbc:mysql://192.168.29.128:3306/crawlerDB
+    url: jdbc:mysql://localhost:3306/crawlerDB
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+
+logging:
+  level:
+    root: INFO
+    com.wisea.controller: DEBUG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

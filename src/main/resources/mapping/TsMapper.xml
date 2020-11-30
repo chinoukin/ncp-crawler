@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wisea.mapper.TsMapper">
+    <insert id="batchInsertTsIndex" parameterType="java.util.List">
+        insert into ts_index (id, ts_id, ts_no, ts_validity, ts_name, ts_pub_dept, status) values
+        <foreach collection="list" item="tsIndex" separator="," close=";">
+            (#{tsIndex.id},#{tsIndex.tsId},#{tsIndex.tsNo},#{tsIndex.tsValidity},
+            #{tsIndex.tsName},#{tsIndex.tsPubDept},#{tsIndex.status})
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateTsIndex" parameterType="java.util.List">
+        update ts_index
+        set status =
+        <foreach collection="list" item="tsIndex" separator=" " open="case id" close="end">
+            when #{tsIndex.id} then '1'
+        </foreach>
+        where id in
+        <foreach collection="list" item="tsIndex" separator="," open="(" close=")">
+            #{tsIndex.id}
+        </foreach>
+        and status = '0'
+
+    </update>
+
+
+    <insert id="batchInsertTsDetail" parameterType="java.util.List">
+        insert into ts_detail (id, ts_id,ts_no,ts_country,ts_validity,ts_name,ts_ens_name,
+        ts_pub_dept,ts_class,ics_class,pub_date,impl_date,pub_no,official_source,ts_summary,
+        instead_ts,current_ts,modif_list) values
+        <foreach collection="list" item="tsDetail" separator="," close=";">
+            (#{tsDetail.id},#{tsDetail.tsId},#{tsDetail.tsNo},#{tsDetail.tsCountry},#{tsDetail.tsValidity},
+            #{tsDetail.tsName},#{tsDetail.tsEnsName},#{tsDetail.tsPubDept},#{tsDetail.tsClass},
+            #{tsDetail.icsClass},#{tsDetail.pubDate},#{tsDetail.implDate},#{tsDetail.pubNo},
+            #{tsDetail.officialSource},#{tsDetail.tsSummary},#{tsDetail.insteadTs},#{tsDetail.currentTs},
+            #{tsDetail.modifList})
+        </foreach>
+    </insert>
+</mapper>
