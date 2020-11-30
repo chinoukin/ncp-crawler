@@ -12,7 +12,7 @@ spring:
     password: 123456
 server:
   ssl:
-    key-store: chinoukin.xyz.jks
+    key-store: classpath:chinoukin.xyz.jks
     key-store-password: 7312p6tmhn
 
 
