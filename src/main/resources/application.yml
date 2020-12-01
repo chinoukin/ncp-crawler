@@ -11,12 +11,12 @@ spring:
     username: root
     password: 123456
 server:
-  port: 443
+  port: 1443
   ssl:
     key-store: classpath:chinoukin.xyz.jks
     key-store-password: 7312p6tmhn
   http:
-    port: 80
+    port: 8080
 
 
 logging:
