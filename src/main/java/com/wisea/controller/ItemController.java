@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 @RestController
 @RequestMapping("/item")
-public class ItemController extends AbstractController{
+public class ItemController extends AbstractController {
 
     public final static Logger logger = LoggerFactory.getLogger(ItemController.class);
     public final static String LOGIN_INFO_KEY = "JSESSIONID=%s";
@@ -56,8 +56,8 @@ public class ItemController extends AbstractController{
      * @return
      */
     @RequestMapping("/index")
-    public String itemIndex(@RequestParam(value = "chinaOnly", defaultValue = "false", required = false) boolean chinaOnly,
-                            @RequestParam(value = "loginSessionId") String loginSessionId) {
+    public String itemIndex(@RequestParam(value = "loginSessionId") String loginSessionId,
+                            @RequestParam(value = "isSmallRange", defaultValue = "false") boolean isSmallRange) {
         HttpHeaders httpHeaders = new HttpHeaders();
         // 登录信息从浏览器上登录后复制下来
         httpHeaders.add("Cookie", String.format(LOGIN_INFO_KEY, loginSessionId));
@@ -68,8 +68,10 @@ public class ItemController extends AbstractController{
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         while (true) {
-            if (pageNum == 11) {
-                break;
+            if (isSmallRange) {
+                if (pageNum == 11) {
+                    break;
+                }
             }
             // 判断当前页是否被处理过
             ItemIndexPage itemIndexPage = itemMapper.findPage(pageNum);
@@ -90,9 +92,9 @@ public class ItemController extends AbstractController{
             map.put("counts", Collections.singletonList(String.valueOf(counts)));
             // 查全部数据(可不指定此参数)或只查中国,若切换此参数的配置则需清空item_index_page表
             //"[{\"field\":\"a.ITEM_COUNTRY\",\"rule\":\"equal\",\"disp\":\"国别\",\"value\":\"中国,中国香港,中国台湾,中国澳门,CAC,日本,欧盟,美国,韩国,加拿大,澳大利亚,新西兰,其它\"}]"
-            if (chinaOnly) {
-                map.put("searchs", Collections.singletonList("[{\"field\":\"a.ITEM_COUNTRY\",\"rule\":\"equal\",\"disp\":\"国别\",\"value\":\"中国\"}]"));
-            }
+            //if (chinaOnly) {
+            //    map.put("searchs", Collections.singletonList("[{\"field\":\"a.ITEM_COUNTRY\",\"rule\":\"equal\",\"disp\":\"国别\",\"value\":\"中国\"}]"));
+            //}
 
             HttpEntity httpEntity = new HttpEntity(map, httpHeaders);
 
@@ -147,9 +149,6 @@ public class ItemController extends AbstractController{
         long startRow = 0L;
         while (true) {
             List<ItemIndex> itemIndexList = itemMapper.findItemIndexList(startRow, 100);
-//            if (startRow == 100) {
-//                break;
-//            }
             if (itemIndexList == null || itemIndexList.size() == 0) {
                 break;
             }

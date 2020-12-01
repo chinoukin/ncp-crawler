@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,15 +52,17 @@ public class TsController extends AbstractController {
      * @return
      */
     @RequestMapping("/index")
-    public String tsIndex() {
+    public String tsIndex(@RequestParam(value = "isSmallRange", defaultValue = "false") boolean isSmallRange) {
         HttpHeaders httpHeaders = new HttpHeaders();
         int pageNum = 1;
         List<TsIndexPage> treatedPages = tsMapper.findTreatedPages();
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         while (true) {
-            if (pageNum == 11) {
-                break;
+            if (isSmallRange) {
+                if (pageNum == 11) {
+                    break;
+                }
             }
             // 判断当前页是否被处理过
             TsIndexPage tsIndexPage = tsMapper.findPage(pageNum);
@@ -119,9 +122,6 @@ public class TsController extends AbstractController {
         long startRow = 0L;
         while (true) {
             List<TsIndex> tsIndexList = tsMapper.findTsIndexList(startRow, 100);
-//            if (startRow == 100) {
-//                break;
-//            }
             if (tsIndexList == null || tsIndexList.size() == 0) {
                 break;
             }
