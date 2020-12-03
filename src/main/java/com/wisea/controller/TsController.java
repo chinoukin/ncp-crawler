@@ -116,10 +116,13 @@ public class TsController extends AbstractController {
      * @return
      */
     @RequestMapping("/detail")
-    public String tsDetail() {
+    public String tsDetail(@RequestParam(value = "startRow", defaultValue = "0") long startRow) {
         HttpHeaders httpHeaders = new HttpHeaders();
         // 查询全部的项目索引库数据,每次查100条
-        long startRow = 0L;
+        //long startRow = 0L;
+        if (startRow == 0L) {
+            startRow = tsMapper.findTreatedTsIndexMaxRow();
+        }
         while (true) {
             List<TsIndex> tsIndexList = tsMapper.findTsIndexList(startRow, 100);
             if (tsIndexList == null || tsIndexList.size() == 0) {

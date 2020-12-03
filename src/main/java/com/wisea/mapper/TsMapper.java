@@ -33,6 +33,9 @@ public interface TsMapper {
 
     int batchUpdateTsIndex(List<TsIndex> list);
 
+    @Select("select count(1) from ts_index where status = '1'")
+    long findTreatedTsIndexMaxRow();
+
     @Select("select id,ts_id,ts_no,ts_validity,ts_name,ts_pub_dept,status from ts_index order by ts_id limit #{startRow},#{count}")
     List<TsIndex> findTsIndexList(Long startRow, Integer count);
 

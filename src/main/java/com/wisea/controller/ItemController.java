@@ -141,12 +141,16 @@ public class ItemController extends AbstractController {
      * @return
      */
     @RequestMapping("/detail")
-    public String itemDetail(@RequestParam(value = "loginSessionId") String loginSessionId) {
+    public String itemDetail(@RequestParam(value = "loginSessionId") String loginSessionId,
+                             @RequestParam(value="startRow",defaultValue = "0") long startRow) {
         HttpHeaders httpHeaders = new HttpHeaders();
         // 登录信息从浏览器上登录后复制下来
         httpHeaders.add("Cookie", String.format(LOGIN_INFO_KEY, loginSessionId));
         // 查询全部的项目索引库数据,每次查100条
-        long startRow = 0L;
+        //long startRow = 0L;
+        if (startRow == 0L) {
+            startRow = itemMapper.findTreatedItemIndexMaxRow();
+        }
         while (true) {
             List<ItemIndex> itemIndexList = itemMapper.findItemIndexList(startRow, 100);
             if (itemIndexList == null || itemIndexList.size() == 0) {

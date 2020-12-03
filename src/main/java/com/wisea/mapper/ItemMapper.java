@@ -33,6 +33,9 @@ public interface ItemMapper {
 
     int batchUpdateItemIndex(List<ItemIndex> list);
 
+    @Select("select count(1) from item_index where status = '1'")
+    long findTreatedItemIndexMaxRow();
+
     @Select("select id,item_id,item_country,status from item_index order by item_id limit #{startRow},#{count}")
     List<ItemIndex> findItemIndexList(Long startRow, Integer count);
 
