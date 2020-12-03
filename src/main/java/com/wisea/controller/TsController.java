@@ -100,11 +100,11 @@ public class TsController extends AbstractController {
             tsService.tsIndex(tsIndexPage, dataMapList);
             pageNum++;
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
         return "success";
 

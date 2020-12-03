@@ -125,11 +125,11 @@ public class ItemController extends AbstractController {
             itemService.itemIndex(itemIndexPage, dataMapList);
             pageNum++;
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
         return "success";
 
