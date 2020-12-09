@@ -56,17 +56,20 @@ public class AbstractController {
                 }
             }
         }
+        StringBuffer textBuff = new StringBuffer();
         // 格式输出
         for (Map.Entry entry : map.entrySet()) {
-            System.out.println("--"+entry.getKey()+"="+entry.getValue()+" \\");
-
+            String text = "--" + entry.getKey() + "=" + entry.getValue() + " ";
+            System.out.println(text + "\\");
+            textBuff.append(text);
         }
+        map.put("text", textBuff.toString());
         return map;
     }
 
 
     @RequestMapping("/createException")
-    public String exceptionTest(){
+    public String exceptionTest() {
         throw new RuntimeException("Got a exception for test");
     }
 }
