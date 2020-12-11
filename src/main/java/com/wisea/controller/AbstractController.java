@@ -37,7 +37,7 @@ public class AbstractController {
     @Autowired
     Environment environment;
 
-    @GetMapping(value = {"/env","env1"})
+    @GetMapping(value = {"/env", "/env1", "/env2"})
     public Map<String, Object> env() {
         System.out.println(environment.getDefaultProfiles()[0]);
         StandardEnvironment standardEnvironment = (StandardEnvironment) environment;

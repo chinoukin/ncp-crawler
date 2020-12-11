@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableResourceServer
-@Order(2)
+@Order(3)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
@@ -20,6 +20,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 .requestMatchers().anyRequest()
                 .and().authorizeRequests()
-                .antMatchers("/env1").authenticated();
+                .antMatchers("/env1").authenticated()
+                .antMatchers("/env2").hasRole("manager")
+                .and().cors();
     }
 }
