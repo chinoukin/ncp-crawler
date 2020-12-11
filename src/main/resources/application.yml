@@ -10,6 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
+
 server:
   port: 1443
   ssl:
@@ -17,7 +18,6 @@ server:
     key-store-password: 7312p6tmhn
   http:
     port: 8080
-
 
 logging:
   level:

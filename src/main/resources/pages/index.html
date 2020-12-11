@@ -6,14 +6,26 @@
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
     <script>
+        // $(function () {
+        //     console.log("Page for test")
+        //     $.ajax({
+        //         url: "https://www.chinoukin.xyz/env",
+        //         contentType: "application/json",
+        //         // headers: {
+        //         //     tw: "999"
+        //         // },
+        //         success: function (data) {
+        //             console.log(data);
+        //             $("#content").append(JSON.stringify(data));
+        //         }
+        //     });
+        // });
+
         $(function () {
             console.log("Page for test")
             $.ajax({
-                url: "https://www.chinoukin.xyz/env",
+                url: "http://localhost:8080/env",
                 contentType: "application/json",
-                // headers: {
-                //     tw: "999"
-                // },
                 success: function (data) {
                     console.log(data);
                     $("#content").append(JSON.stringify(data));
