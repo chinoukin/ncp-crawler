@@ -21,9 +21,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
+        if (corsConfiguration.getAllowedOrigins() == null) {
+            corsConfiguration.addAllowedOrigin("*");
+        }
+        if (corsConfiguration.getAllowedHeaders() == null) {
+            corsConfiguration.addAllowedHeader("*");
+        }
+        if (corsConfiguration.getAllowedMethods() == null) {
+            corsConfiguration.addAllowedMethod("*");
+        }
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);

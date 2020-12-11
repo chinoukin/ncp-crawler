@@ -21,10 +21,23 @@
         //     });
         // });
 
+        // $(function () {
+        //     console.log("Page for test")
+        //     $.ajax({
+        //         url: "http://localhost:8080/env",
+        //         contentType: "application/json",
+        //         success: function (data) {
+        //             console.log(data);
+        //             $("#content").append(JSON.stringify(data));
+        //         }
+        //     });
+        // });
+
         $(function () {
             console.log("Page for test")
             $.ajax({
-                url: "http://localhost:8080/env",
+                url: "https://www.chinoukin.xyz/oauth/token?grant_type=password&client_id=cli1&client_secret=123456&username=chinoukin&password=123456",
+                method: "post",
                 contentType: "application/json",
                 success: function (data) {
                     console.log(data);
