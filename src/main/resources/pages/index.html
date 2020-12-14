@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+
     <title>MixProject</title>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
@@ -24,7 +26,7 @@
         // $(function () {
         //     console.log("Page for test")
         //     $.ajax({
-        //         url: "http://localhost:8080/env",
+        //         url: "https://www.chinoukin.xyz/env",
         //         contentType: "application/json",
         //         success: function (data) {
         //             console.log(data);
@@ -45,6 +47,22 @@
                 }
             });
         });
+
+        // $(function () {
+        //     console.log("Page for test")
+        //     $.ajax({
+        //         url: "https://www.chinoukin.xyz/oauth/authorize?client_id=cli2&response_type=code",
+        //         method: "get",
+        //         contentType: "application/json",
+        //         header: {
+        //             Authorization: "Basic Y2hpbm91a2luOjEyMzQ1Ng=="
+        //         },
+        //         success: function (data) {
+        //             console.log(data);
+        //             $("#content").append(JSON.stringify(data));
+        //         }
+        //     });
+        // });
     </script>
 </head>
 <body>

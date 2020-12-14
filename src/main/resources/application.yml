@@ -24,6 +24,9 @@ logging:
     root: INFO
     com.wisea.controller: DEBUG
 
+web:
+  cors: true
+
 
 
 

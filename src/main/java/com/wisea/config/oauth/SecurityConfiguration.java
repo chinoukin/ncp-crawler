@@ -1,6 +1,8 @@
 package com.wisea.config.oauth;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
+    @ConditionalOnProperty(value="web.cors", havingValue = "true")
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
