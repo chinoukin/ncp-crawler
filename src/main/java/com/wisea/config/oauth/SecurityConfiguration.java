@@ -20,7 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
-    @ConditionalOnProperty(value="web.cors", havingValue = "true")
+    @ConditionalOnProperty(prefix = "web", value="cors", havingValue = "true")
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
