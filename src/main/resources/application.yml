@@ -27,6 +27,8 @@ logging:
 web:
   cors: true
 
+redirectUris: /auth_code
+
 
 
 

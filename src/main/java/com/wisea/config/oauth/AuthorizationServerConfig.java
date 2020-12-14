@@ -2,6 +2,7 @@ package com.wisea.config.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -33,6 +34,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private TokenStore tokenStore;
 
+    @Value("${redirectUris}")
+    private String redirectUris;
+
     @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(jwtAccessTokenConverter());
@@ -59,7 +63,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("cli2")
                 .authorizedGrantTypes("authorization_code")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
-                .redirectUris("/auth_code","https://www.chinoukin.xyz/auth_code")
+                //.redirectUris("/auth_code")
+                .redirectUris(redirectUris)
                 .scopes("read")
                 .autoApprove(true)
                 ;
