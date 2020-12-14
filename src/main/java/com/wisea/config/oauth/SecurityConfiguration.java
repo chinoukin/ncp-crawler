@@ -56,7 +56,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //.antMatchers("/oauth/**").permitAll()
                 .antMatchers("/oauth/**").authenticated()
-                .and().httpBasic();
+                .and().httpBasic()
+                .and().cors();
     }
 
     @Override

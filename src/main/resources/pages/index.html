@@ -8,6 +8,51 @@
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
     <script>
+        $(function () {
+            console.log("Page for test")
+            $.ajax({
+                url: "http://localhost:8080/env",
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                    $("#content").append(JSON.stringify(data));
+                }
+            });
+        });
+
+
+        $(function () {
+            console.log("Page for test")
+            $.ajax({
+                url: "http://localhost:8080/oauth/token?grant_type=password&client_id=cli1&client_secret=123456&username=chinoukin&password=123456",
+                method: "post",
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                    $("#content").append(JSON.stringify(data));
+                }
+            });
+        });
+
+        $(function () {
+            console.log("Page for test")
+            $.ajax({
+                url: "http://localhost:8080/oauth/authorize?client_id=cli2&response_type=code",
+                method: "get",
+                contentType: "application/json",
+                xhrFields: {
+                    withCredentials: true
+                },
+                header: {
+                    Authorization: "Basic Y2hpbm91a2luOjEyMzQ1Ng=="
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("#content").append(JSON.stringify(data));
+                }
+            });
+        });
+
         // $(function () {
         //     console.log("Page for test")
         //     $.ajax({
@@ -35,18 +80,18 @@
         //     });
         // });
 
-        $(function () {
-            console.log("Page for test")
-            $.ajax({
-                url: "https://www.chinoukin.xyz/oauth/token?grant_type=password&client_id=cli1&client_secret=123456&username=chinoukin&password=123456",
-                method: "post",
-                contentType: "application/json",
-                success: function (data) {
-                    console.log(data);
-                    $("#content").append(JSON.stringify(data));
-                }
-            });
-        });
+        // $(function () {
+        //     console.log("Page for test")
+        //     $.ajax({
+        //         url: "https://www.chinoukin.xyz/oauth/token?grant_type=password&client_id=cli1&client_secret=123456&username=chinoukin&password=123456",
+        //         method: "post",
+        //         contentType: "application/json",
+        //         success: function (data) {
+        //             console.log(data);
+        //             $("#content").append(JSON.stringify(data));
+        //         }
+        //     });
+        // });
 
         // $(function () {
         //     console.log("Page for test")
