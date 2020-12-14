@@ -59,7 +59,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("cli2")
                 .authorizedGrantTypes("authorization_code")
                 .secret(new BCryptPasswordEncoder().encode("123456"))
-                .redirectUris("/auth_code")
+                .redirectUris("/auth_code","https://www.chinoukin.xyz/auth_code")
                 .scopes("read")
                 .autoApprove(true)
                 ;
