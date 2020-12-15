@@ -27,6 +27,7 @@ logging:
 web:
   cors: true
 
+#redirectUris: https://www.chinoukin.xyz/auth_code
 redirectUris: /auth_code
 
 
