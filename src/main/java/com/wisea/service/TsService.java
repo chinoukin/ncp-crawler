@@ -54,7 +54,7 @@ public class TsService {
             tsIdsArr.add(dataMap.get("TS_ID"));
         }
         String tsIds = tsIdsBuff.substring(0, tsIdsBuff.length()-1);
-        List<TsIndex> list = tsMapper.findTsIndexList(tsIds);
+        List<TsIndex> list = tsMapper.findSubTsIndexList(tsIds);
 
         List<Map<String, String>> subDataMapList = new ArrayList<>();
         int count = 0;

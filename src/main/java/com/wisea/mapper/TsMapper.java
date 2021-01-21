@@ -40,7 +40,7 @@ public interface TsMapper {
     List<TsIndex> findTsIndexList(Long startRow, Integer count);
 
     @Select("select id,ts_id,ts_no,ts_validity,ts_name,ts_pub_dept,status from ts_index where ts_id in (#{tsIds})")
-    List<TsIndex> findTsIndexList(String tsIds);
+    List<TsIndex> findSubTsIndexList(String tsIds);
 
     int batchInsertTsDetail(List<TsDetail> list);
 
