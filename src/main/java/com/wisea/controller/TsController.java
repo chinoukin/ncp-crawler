@@ -111,6 +111,54 @@ public class TsController extends AbstractController {
     }
 
     /**
+     * 远程有更新的时候,跟新索引，此时不再使用page检查
+     * @param diffCount
+     * @return
+     */
+    @RequestMapping("/updateIndex")
+    public String updateIndex(@RequestParam(value = "diffCount", defaultValue = "0") Integer diffCount) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        int pageNum = 1;
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+
+        int counter = 0;// 计数器，当counter等于diffCount时程序终止
+        while (true) {
+
+            map.put("pageNum", Collections.singletonList(String.valueOf(pageNum)));
+            map.put("isCurrent", Collections.singletonList("2"));
+            map.put("isCompulsive", Collections.singletonList("2"));
+
+            HttpEntity httpEntity = new HttpEntity(map, httpHeaders);
+
+            ResponseEntity<String> exchange = restTemplate.exchange("https://www.sdtdata.com/fx/foodcodex?p=tsLibList&s=fmoa&act=doSearch", HttpMethod.POST, httpEntity, String.class);
+            String responseBody = exchange.getBody();
+
+            String substring = responseBody.substring(responseBody.indexOf("["), responseBody.lastIndexOf("]") + 1);
+            if ("[]".equals(substring)) {
+                break;
+            }
+            logger.debug("当前页码:" + pageNum);
+
+            List<Map<String, String>> dataMapList = (List<Map<String, String>>) JsonMapper.fromJsonString(substring, List.class);
+
+            int count = tsService.updateIndex(dataMapList);
+            counter += count;
+            if (counter == diffCount) {
+                break;
+            }
+            pageNum++;
+
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+        }
+        return "success";
+    }
+
+    /**
      * 标准-详情入库
      *
      * @return
