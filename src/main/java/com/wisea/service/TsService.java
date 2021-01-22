@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -52,33 +51,30 @@ public class TsService {
         }
         List<TsIndex> list = tsMapper.findSubTsIndexList(tsIds);
 
+        if (list.size() == dataMapList.size()) {
+            return 0;
+        }
+
         List<Map<String, String>> subDataMapList = new ArrayList<>();
-        int count = 0;
-        if (list.size() == 0) {
-            count = dataMapList.size();
+        for (TsIndex tsIndex : list) {
+            int index = tsIds.indexOf(tsIndex.getTsId());
+            subDataMapList.add(dataMapList.get(index));
         }
-        if (list.size() > 0 && list.size() < dataMapList.size()) {
-            for (TsIndex tsIndex : list) {
-                int index = tsIds.indexOf(tsIndex.getTsId());
-                subDataMapList.add(dataMapList.get(index));
-            }
+        if (subDataMapList.size() > 0) {
             dataMapList.removeAll(subDataMapList);
-            count = dataMapList.size() - list.size();
         }
-        if (count > 0) {
-            for (Map<String, String> dataMap : dataMapList) {
-                TsIndex tsIndex = new TsIndex();
-                tsIndex.setId(Math.abs(new Random().nextLong()));
-                tsIndex.setTsId(dataMap.get("TS_ID"));
-                tsIndex.setTsNo(dataMap.get("TS_NO"));
-                tsIndex.setTsName(dataMap.get("TS_NAME"));
-                tsIndex.setTsValidity(dataMap.get("TS_VALIDITY"));
-                tsIndex.setTsPubDept(dataMap.get("TS_PUBLISH_DEPT"));
-                tsIndex.setStatus("0");
-                list.add(tsIndex);
-            }
+        for (Map<String, String> dataMap : dataMapList) {
+            TsIndex tsIndex = new TsIndex();
+            tsIndex.setId(Math.abs(new Random().nextLong()));
+            tsIndex.setTsId(dataMap.get("TS_ID"));
+            tsIndex.setTsNo(dataMap.get("TS_NO"));
+            tsIndex.setTsName(dataMap.get("TS_NAME"));
+            tsIndex.setTsValidity(dataMap.get("TS_VALIDITY"));
+            tsIndex.setTsPubDept(dataMap.get("TS_PUBLISH_DEPT"));
+            tsIndex.setStatus("0");
+            list.add(tsIndex);
         }
-        return count;
+        return tsMapper.batchInsertTsIndex(list);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
