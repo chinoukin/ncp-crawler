@@ -63,6 +63,8 @@ public class TsService {
         if (subDataMapList.size() > 0) {
             dataMapList.removeAll(subDataMapList);
         }
+
+        list = new ArrayList<>();
         for (Map<String, String> dataMap : dataMapList) {
             TsIndex tsIndex = new TsIndex();
             tsIndex.setId(Math.abs(new Random().nextLong()));
