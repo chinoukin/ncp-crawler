@@ -46,14 +46,10 @@ public class TsService {
     @Transactional(propagation = Propagation.REQUIRES_NEW) //为每一页列表数据开启一个事务
     public int updateIndex(List<Map<String, String>> dataMapList) {
         // 检查是否在数据库中存在
-        StringBuffer tsIdsBuff = new StringBuffer();
-        List<String> tsIdsArr = new ArrayList<>();
+        List<String> tsIds = new ArrayList<>();
         for (Map<String, String> dataMap : dataMapList) {
-            tsIdsBuff.append(dataMap.get("TS_ID"));
-            tsIdsBuff.append(",");
-            tsIdsArr.add(dataMap.get("TS_ID"));
+            tsIds.add(dataMap.get("TS_ID"));
         }
-        String tsIds = tsIdsBuff.substring(0, tsIdsBuff.length()-1);
         List<TsIndex> list = tsMapper.findSubTsIndexList(tsIds);
 
         List<Map<String, String>> subDataMapList = new ArrayList<>();
@@ -61,14 +57,15 @@ public class TsService {
         if (list.size() == 0) {
             count = dataMapList.size();
         }
-
         if (list.size() > 0 && list.size() < dataMapList.size()) {
             for (TsIndex tsIndex : list) {
-                int index = tsIdsArr.indexOf(tsIndex.getTsId());
+                int index = tsIds.indexOf(tsIndex.getTsId());
                 subDataMapList.add(dataMapList.get(index));
             }
             dataMapList.removeAll(subDataMapList);
-
+            count = dataMapList.size() - list.size();
+        }
+        if (count > 0) {
             for (Map<String, String> dataMap : dataMapList) {
                 TsIndex tsIndex = new TsIndex();
                 tsIndex.setId(Math.abs(new Random().nextLong()));
@@ -80,7 +77,6 @@ public class TsService {
                 tsIndex.setStatus("0");
                 list.add(tsIndex);
             }
-            count = tsMapper.batchInsertTsIndex(list);
         }
         return count;
     }

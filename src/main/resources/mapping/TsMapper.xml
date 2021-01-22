@@ -23,6 +23,13 @@
 
     </update>
 
+    <select id="findSubTsIndexList" parameterType="java.util.List" resultType="com.wisea.entity.TsIndex">
+        select id,ts_id,ts_no,ts_validity,ts_name,ts_pub_dept,status from ts_index
+        where ts_id in
+        <foreach collection="list" item="tsId" separator="," open="(" close=")">
+            #{tsId}
+        </foreach>
+    </select>
 
     <insert id="batchInsertTsDetail" parameterType="java.util.List">
         insert into ts_detail (id, ts_id,ts_no,ts_country,ts_validity,ts_name,ts_ens_name,
