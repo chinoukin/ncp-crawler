@@ -58,7 +58,7 @@
         <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end">
             when #{tsId} then #{linkName}
         </foreach>
-        where id in
+        where ts_id in
         <foreach collection="tsIds" item="tsId" separator="," open="(" close=")">
             #{tsId}
         </foreach>
