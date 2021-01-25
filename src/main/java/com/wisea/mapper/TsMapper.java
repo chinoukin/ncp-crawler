@@ -1,6 +1,8 @@
 package com.wisea.mapper;
 
+import com.wisea.entity.FcProdType;
 import com.wisea.entity.TsDetail;
+import com.wisea.entity.TsDetailSqlParam;
 import com.wisea.entity.TsIndex;
 import com.wisea.entity.TsIndexPage;
 import org.apache.ibatis.annotations.Delete;
@@ -41,6 +43,13 @@ public interface TsMapper {
 
     List<TsIndex> findSubTsIndexList(List<String> tsIds);
 
+
     int batchInsertTsDetail(List<TsDetail> list);
+
+
+    @Select("select * from fc_prod_type where (length(names)-length(replace(names,'>',''))) = #{level}")
+    List<FcProdType> findFcProdTypeList(int level);
+
+    int batchUpdateTsDetail(TsDetailSqlParam tsDetailSqlParam);
 
 }

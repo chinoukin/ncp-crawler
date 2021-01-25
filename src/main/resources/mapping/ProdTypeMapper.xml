@@ -8,4 +8,12 @@
             #{prodType.names})
         </foreach>
     </insert>
+
+    <insert id="batchInsertFcProdType" parameterType="java.util.List">
+        insert into fc_prod_type (id, name,fc_type_code,parent_id,parent_ids,names) values
+        <foreach collection="list" item="fcProdType" separator="," close=";">
+            (#{fcProdType.id},#{fcProdType.name},#{fcProdType.fcTypeCode},#{fcProdType.parentId},#{fcProdType.parentIds},
+            #{fcProdType.names})
+        </foreach>
+    </insert>
 </mapper>

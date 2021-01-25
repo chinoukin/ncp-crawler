@@ -1,6 +1,8 @@
 package com.wisea.service;
 
+import com.wisea.entity.FcProdType;
 import com.wisea.entity.TsDetail;
+import com.wisea.entity.TsDetailSqlParam;
 import com.wisea.entity.TsIndex;
 import com.wisea.entity.TsIndexPage;
 import com.wisea.mapper.TsMapper;
@@ -83,6 +85,40 @@ public class TsService {
     public String tsDetail(List<TsDetail> tsDetailList, List<TsIndex> tsIndexList) {
         tsMapper.batchInsertTsDetail(tsDetailList);
         tsMapper.batchUpdateTsIndex(tsIndexList);
+        return "success";
+    }
+
+    /**
+     * 查询fc产品分类数据，分类级别排序，级别小的靠前
+     * @return
+     */
+    public List<FcProdType> findRankByLevelList(){
+        List<FcProdType> list = new ArrayList<>();
+        int level = 1;
+        while(true) {
+            List<FcProdType> fcProdTypeList = tsMapper.findFcProdTypeList(level-1);
+            if (fcProdTypeList == null || fcProdTypeList.size() == 0) {
+                break;
+            }
+            list.addAll(fcProdTypeList);
+            level++;
+        }
+        return list;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String updateTsDetail(List<Map<String, String>> dataMapList, FcProdType fcProdType, String linkName) {
+        List<String> tsIds = new ArrayList<>();
+        for (Map<String, String> dataMap : dataMapList) {
+            tsIds.add(dataMap.get("TS_ID"));
+        }
+        TsDetailSqlParam tsDetailSqlParam = new TsDetailSqlParam();
+        tsDetailSqlParam.setFcProdType(fcProdType);
+        tsDetailSqlParam.setLinkName(linkName);
+        tsDetailSqlParam.setTsIds(tsIds);
+
+        tsMapper.batchUpdateTsDetail(tsDetailSqlParam);
+
         return "success";
     }
 }

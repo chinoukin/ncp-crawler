@@ -43,4 +43,24 @@
             #{tsDetail.modifList})
         </foreach>
     </insert>
+
+    <update id="batchUpdateTsDetail" parameterType="com.wisea.entity.TsDetailSqlParam">
+        update ts_detail
+        set fc_prod_type_id =
+        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end,">
+            when #{tsId} then #{fcProdType.id}
+        </foreach>
+        fc_prod_type_name =
+        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end,">
+            when #{tsId} then #{fcProdType.name}
+        </foreach>
+        link_name =
+        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end">
+            when #{tsId} then #{linkName}
+        </foreach>
+        where id in
+        <foreach collection="tsIds" item="tsId" separator="," open="(" close=")">
+            #{tsId}
+        </foreach>
+    </update>
 </mapper>

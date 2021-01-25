@@ -1,9 +1,11 @@
 package com.wisea.controller;
 
 import com.wisea.JsonMapper;
+import com.wisea.entity.FcProdType;
 import com.wisea.entity.TsDetail;
 import com.wisea.entity.TsIndex;
 import com.wisea.entity.TsIndexPage;
+import com.wisea.mapper.LinkDictMapper;
 import com.wisea.mapper.TsMapper;
 import com.wisea.service.TsService;
 import org.slf4j.Logger;
@@ -42,6 +44,9 @@ public class TsController extends AbstractController {
 
     @Autowired
     TsMapper tsMapper;
+
+    @Autowired
+    LinkDictMapper linkDictMapper;
 
 
     /**
@@ -112,6 +117,7 @@ public class TsController extends AbstractController {
 
     /**
      * 远程有更新的时候,跟新索引，此时不再使用page检查
+     *
      * @param diffCount
      * @return
      */
@@ -255,6 +261,54 @@ public class TsController extends AbstractController {
             startRow += 100;
         }
         logger.debug("===========================All completed!");
+        return "success";
+    }
+
+    /**
+     * 为详情信息添加产品分类和环节信息
+     *
+     * @return
+     */
+    @RequestMapping("/updateDetail")
+    public String updateTsDetail() {
+        // 查询fc产品分类信息
+        List<FcProdType> fcProdTypeList = tsService.findRankByLevelList();
+        // 查询环节字典信息
+        List<String> linkNameList = linkDictMapper.findLinkNameList();
+
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.put("isCurrent", Collections.singletonList("2"));
+        map.put("isCompulsive", Collections.singletonList("2"));
+
+        for (FcProdType fcProdType : fcProdTypeList) {
+            map.put("fcTypeCode", Collections.singletonList(fcProdType.getFcTypeCode()));
+            for (String linkName : linkNameList) {
+                map.put("hj", Collections.singletonList(linkName));
+
+                int pageNum = 1;
+                while (true) {
+                    map.put("pageNum", Collections.singletonList(String.valueOf(pageNum)));
+                    HttpEntity httpEntity = new HttpEntity(map, httpHeaders);
+
+                    ResponseEntity<String> exchange = restTemplate.exchange("https://www.sdtdata.com/fx/foodcodex?p=tsLibList&s=fmoa&act=doSearch", HttpMethod.POST, httpEntity, String.class);
+                    String responseBody = exchange.getBody();
+
+                    String substring = responseBody.substring(responseBody.indexOf("["), responseBody.lastIndexOf("]") + 1);
+                    if ("[]".equals(substring)) {
+                        break;
+                    }
+                    logger.debug("分类：" + fcProdType.getName() + ",环节：" + linkName + ",页码:" + pageNum);
+
+                    List<Map<String, String>> dataMapList = (List<Map<String, String>>) JsonMapper.fromJsonString(substring, List.class);
+
+                    tsService.updateTsDetail(dataMapList, fcProdType, linkName);
+                    pageNum++;
+                }
+            }
+        }
+
         return "success";
     }
 
