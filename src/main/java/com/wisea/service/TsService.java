@@ -1,6 +1,8 @@
 package com.wisea.service;
 
 import com.wisea.entity.FcProdType;
+import com.wisea.entity.FcProdTypeTsSqlParam;
+import com.wisea.entity.RelaParentSqlParam;
 import com.wisea.entity.TsDetail;
 import com.wisea.entity.TsDetailSqlParam;
 import com.wisea.entity.TsIndex;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class TsService {
@@ -106,19 +109,50 @@ public class TsService {
         return list;
     }
 
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    public String updateTsDetail(List<Map<String, String>> dataMapList, FcProdType fcProdType, String linkName) {
+//        List<String> tsIds = new ArrayList<>();
+//        for (Map<String, String> dataMap : dataMapList) {
+//            tsIds.add(dataMap.get("TS_ID"));
+//        }
+//        TsDetailSqlParam tsDetailSqlParam = new TsDetailSqlParam();
+//        tsDetailSqlParam.setFcProdType(fcProdType);
+//        tsDetailSqlParam.setLinkName(linkName);
+//        tsDetailSqlParam.setTsIds(tsIds);
+//
+//        tsMapper.batchUpdateTsDetail(tsDetailSqlParam);
+//
+//        return "success";
+//    }
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateTsDetail(List<Map<String, String>> dataMapList, FcProdType fcProdType, String linkName) {
+    public String addTypeTs(List<Map<String, String>> dataMapList, FcProdType fcProdType, String linkName) {
         List<String> tsIds = new ArrayList<>();
         for (Map<String, String> dataMap : dataMapList) {
             tsIds.add(dataMap.get("TS_ID"));
         }
-        TsDetailSqlParam tsDetailSqlParam = new TsDetailSqlParam();
-        tsDetailSqlParam.setFcProdType(fcProdType);
-        tsDetailSqlParam.setLinkName(linkName);
-        tsDetailSqlParam.setTsIds(tsIds);
+        RelaParentSqlParam relaParentSqlParam = new RelaParentSqlParam();
+        String fcTypeCode = fcProdType.getFcTypeCode();
+        relaParentSqlParam.setFcProdTypeCode(fcTypeCode.substring(0, fcTypeCode.length()-2));
+        relaParentSqlParam.setLinkName(linkName);
+        relaParentSqlParam.setTsIds(tsIds);
+        // 删除已记录的父分类
+        tsMapper.deleteFcProdTypeTsByRelaParent(relaParentSqlParam);
 
-        tsMapper.batchUpdateTsDetail(tsDetailSqlParam);
+        FcProdTypeTsSqlParam fcProdTypeTsSqlParam = new FcProdTypeTsSqlParam();
+        fcProdTypeTsSqlParam.setFcProdType(fcProdType);
+        fcProdTypeTsSqlParam.setLinkName(linkName);
+        List<TsDetail> list = new ArrayList<>();
+        for (Map<String, String> dataMap : dataMapList) {
+            TsDetail tsDetail = new TsDetail();
+            tsDetail.setFcProdTypeTsId(UUID.randomUUID().toString().replaceAll("-", ""));
+            tsDetail.setTsId(dataMap.get("TS_ID"));
+            tsDetail.setTsName(dataMap.get("TS_NAME"));
+            list.add(tsDetail);
+        }
+        fcProdTypeTsSqlParam.setList(list);
 
+        tsMapper.batchInsertFcProdTypeTs(fcProdTypeTsSqlParam);
         return "success";
     }
 }

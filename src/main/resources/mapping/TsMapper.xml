@@ -44,23 +44,41 @@
         </foreach>
     </insert>
 
-    <update id="batchUpdateTsDetail" parameterType="com.wisea.entity.TsDetailSqlParam">
-        update ts_detail
-        set fc_prod_type_id =
-        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end,">
-            when #{tsId} then #{fcProdType.id}
-        </foreach>
-        fc_prod_type_name =
-        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end,">
-            when #{tsId} then #{fcProdType.name}
-        </foreach>
-        link_name =
-        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end">
-            when #{tsId} then #{linkName}
-        </foreach>
-        where ts_id in
+<!--    <update id="batchUpdateTsDetail" parameterType="com.wisea.entity.TsDetailSqlParam">-->
+<!--        update ts_detail-->
+<!--        set fc_prod_type_id =-->
+<!--        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end,">-->
+<!--            when #{tsId} then #{fcProdType.id}-->
+<!--        </foreach>-->
+<!--        fc_prod_type_name =-->
+<!--        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end,">-->
+<!--            when #{tsId} then #{fcProdType.name}-->
+<!--        </foreach>-->
+<!--        link_name =-->
+<!--        <foreach collection="tsIds" item="tsId" separator=" " open="case ts_id" close="end">-->
+<!--            when #{tsId} then #{linkName}-->
+<!--        </foreach>-->
+<!--        where ts_id in-->
+<!--        <foreach collection="tsIds" item="tsId" separator="," open="(" close=")">-->
+<!--            #{tsId}-->
+<!--        </foreach>-->
+<!--    </update>-->
+
+    <delete id="deleteFcProdTypeTsByRelaParent" parameterType="com.wisea.entity.RelaParentSqlParam">
+        delete from fc_prod_type_ts
+        where
+        fc_prod_type_code = #{fcProdTypeCode}
+        and link_name = #{linkName}
+        and ts_id in
         <foreach collection="tsIds" item="tsId" separator="," open="(" close=")">
             #{tsId}
         </foreach>
-    </update>
+    </delete>
+
+    <insert id="batchInsertFcProdTypeTs" parameterType="com.wisea.entity.FcProdTypeTsSqlParam">
+        insert into fc_prod_type_ts(id,fc_prod_type_id,fc_prod_type_code,fc_prod_type_name,link_name,ts_id,ts_name) values
+        <foreach collection="list" item="tsDetail" separator="," close=";">
+         (#{tsDetail.fcProdTypeTsId},#{fcProdType.id},#{fcProdType.fcTypeCode},#{fcProdType.name},#{linkName},#{tsDetail.tsId},#{tsDetail.tsName})
+        </foreach>
+    </insert>
 </mapper>

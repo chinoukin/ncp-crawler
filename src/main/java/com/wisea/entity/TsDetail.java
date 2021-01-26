@@ -38,6 +38,9 @@ public class TsDetail {
 
     private String modifList;
 
+    // 用于sql查询主键临时存放
+    private String fcProdTypeTsId;
+
     public Long getId() {
         return id;
     }
@@ -180,5 +183,13 @@ public class TsDetail {
 
     public void setModifList(String modifList) {
         this.modifList = modifList;
+    }
+
+    public String getFcProdTypeTsId() {
+        return fcProdTypeTsId;
+    }
+
+    public void setFcProdTypeTsId(String fcProdTypeTsId) {
+        this.fcProdTypeTsId = fcProdTypeTsId;
     }
 }

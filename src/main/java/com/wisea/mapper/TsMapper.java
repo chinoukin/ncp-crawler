@@ -1,6 +1,8 @@
 package com.wisea.mapper;
 
 import com.wisea.entity.FcProdType;
+import com.wisea.entity.FcProdTypeTsSqlParam;
+import com.wisea.entity.RelaParentSqlParam;
 import com.wisea.entity.TsDetail;
 import com.wisea.entity.TsDetailSqlParam;
 import com.wisea.entity.TsIndex;
@@ -50,6 +52,10 @@ public interface TsMapper {
     @Select("select * from fc_prod_type where (length(names)-length(replace(names,'>',''))) = #{level}")
     List<FcProdType> findFcProdTypeList(int level);
 
-    int batchUpdateTsDetail(TsDetailSqlParam tsDetailSqlParam);
+//    int batchUpdateTsDetail(TsDetailSqlParam tsDetailSqlParam);
+
+    int deleteFcProdTypeTsByRelaParent(RelaParentSqlParam relaParentSqlParam);
+
+    int batchInsertFcProdTypeTs(FcProdTypeTsSqlParam fcProdTypeTsSqlParam);
 
 }

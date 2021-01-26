@@ -269,8 +269,8 @@ public class TsController extends AbstractController {
      *
      * @return
      */
-    @RequestMapping("/updateDetail")
-    public String updateTsDetail() {
+    @RequestMapping("/addTypeTs")
+    public String addTypeTs() {
         // 查询fc产品分类信息
         List<FcProdType> fcProdTypeList = tsService.findRankByLevelList();
         // 查询环节字典信息
@@ -299,11 +299,12 @@ public class TsController extends AbstractController {
                     if ("[]".equals(substring)) {
                         break;
                     }
-                    logger.debug("分类：" + fcProdType.getName() + ",环节：" + linkName + ",页码:" + pageNum);
+                    logger.debug("分类：" + fcProdType.getName() + "  ,环节：" + linkName + "  ,页码:" + pageNum);
 
                     List<Map<String, String>> dataMapList = (List<Map<String, String>>) JsonMapper.fromJsonString(substring, List.class);
 
-                    tsService.updateTsDetail(dataMapList, fcProdType, linkName);
+                    //tsService.updateTsDetail(dataMapList, fcProdType, linkName);
+                    tsService.addTypeTs(dataMapList, fcProdType, linkName);
                     pageNum++;
                 }
             }
